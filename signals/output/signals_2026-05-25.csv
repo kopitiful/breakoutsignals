@@ -1,0 +1,5 @@
+ticker,pattern_type,breakout_type,confirmed,breakout_date,entry_zone_low,entry_zone_high,stop_loss,price_target,measured_move_pct,pattern_duration_weeks,score,status,pattern_start_date,pattern_end_date
+NESN.SW,ihs,pending,pending,,85.45880713333577,85.88610116900244,83.74963099066905,103.3797961707496,20.97,30,56.7,active,2024-09-16,2025-04-07
+NESN.SW,ihs,pending,pending,,82.46895034510273,82.88129509682823,80.81957133820067,97.40541503535641,18.11,16,50.5,active,2025-12-08,2026-03-23
+NESN.SW,rectangle,pending,pending,,81.2895645144731,81.69601233704546,79.66377322418363,90.7568117875022,13.18,9,49.7,active,2026-03-02,2026-04-27
+NESN.SW,triangle_asc,pending,pending,,81.25,81.65624999999999,79.625,90.12284227297707,12.26,9,49.3,active,2026-03-02,2026-04-27
