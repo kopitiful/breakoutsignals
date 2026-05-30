@@ -92,12 +92,12 @@ def build():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Aksel Signals {run_date}</title>
+  <title>Breakout Signals {run_date}</title>
   <style>
     *{{box-sizing:border-box;margin:0;padding:0}}
     body{{font-family:'SF Mono',Consolas,monospace;background:#0d1117;color:#c9d1d9;padding:1.5rem;font-size:13px}}
     h1{{font-size:1rem;color:#58a6ff;margin-bottom:.25rem}}
-    .meta{{color:#6e7681;font-size:11px;margin-bottom:1.5rem}}
+    .meta{{color:#6e7681;font-size:11px;margin-bottom:1rem}}
     table{{border-collapse:collapse;width:100%}}
     th{{color:#8b949e;border-bottom:1px solid #30363d;padding:5px 10px;text-align:left;font-weight:normal;white-space:nowrap}}
     td{{padding:5px 10px;border-bottom:1px solid #161b22;white-space:nowrap}}
@@ -107,10 +107,13 @@ def build():
     .score.hi{{color:#3fb950}}
     .score.mid{{color:#d29922}}
     a{{color:#58a6ff;text-decoration:none}}
+    .legend{{margin:1.5rem 0 1rem;color:#6e7681;font-size:11px;line-height:1.8}}
+    .legend b{{color:#8b949e}}
+    .legend .row{{margin-bottom:.25rem}}
   </style>
 </head>
 <body>
-  <h1>Aksel — Pattern Signals</h1>
+  <h1>Breakout Signals</h1>
   <p class="meta">Run date: {run_date} &nbsp;&middot;&nbsp; Generated: {now} &nbsp;&middot;&nbsp; {len(rows)} signals</p>
   <table>
     <thead>
@@ -122,6 +125,13 @@ def build():
     <tbody>
 {tbody}    </tbody>
   </table>
+  <div class="legend">
+    <div class="row"><b>Pattern</b> &nbsp; rectangle — Seitwärtsrange &nbsp;|&nbsp; triangle_sym — symmetrisches Dreieck &nbsp;|&nbsp; triangle_asc — aufsteigendes Dreieck &nbsp;|&nbsp; ihs — inverse Schulter-Kopf-Schulter</div>
+    <div class="row"><b>Breakout</b> &nbsp; type1 — bestätigter Ausbruch &nbsp;|&nbsp; type2 — Ausbruch + Retest &nbsp;|&nbsp; pending — Muster aktiv, kein Ausbruch</div>
+    <div class="row"><b>Confirmed</b> &nbsp; ✓ = 2 aufeinanderfolgende Closes außerhalb der Mustergrenze</div>
+    <div class="row"><b>Score</b> &nbsp; 0–100 &nbsp; <span style="color:#3fb950">&#x25A0;</span> ≥70 hoch &nbsp; <span style="color:#d29922">&#x25A0;</span> ≥50 mittel</div>
+    <div class="row"><b>Entry Low</b> — untere Grenze der Einstiegszone &nbsp;|&nbsp; <b>Target</b> — Kursziel (Measured Move) &nbsp;|&nbsp; <b>Move%</b> — erwartete Bewegung in %</div>
+  </div>
 </body>
 </html>"""
 
