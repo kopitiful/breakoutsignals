@@ -1,8 +1,8 @@
-name: Daily Signal Run
+ name: Daily Signal Run
 
-  on:
+  'on':
     schedule:
-      - cron: '45 6 * * 1-5'   # Mon–Fri 06:45 UTC
+      - cron: '45 6 * * 1-5'
     workflow_dispatch:
 
   permissions:
@@ -33,7 +33,7 @@ name: Daily Signal Run
             TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
             TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           run: python main.py 2>&1
-
+  
         - name: Build static site
           run: python build_site.py 2>&1
 
