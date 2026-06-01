@@ -1,47 +1,46 @@
 name: Daily Signal Run
 
-  on:
-    schedule:
-      - cron: '45 6 * * 1-5'
-    workflow_dispatch:
+on:
+  schedule:
+    - cron: '45 6 * * 1-5'
+  workflow_dispatch:
 
-  permissions:
-    contents: write
+permissions:
+  contents: write
 
-  env:
-    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-  jobs:
-    run:
-      runs-on: ubuntu-latest
+jobs:
+  run:
+    runs-on: ubuntu-latest
 
-      steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-        - uses: actions/setup-python@v5
-          with:
-            python-version: '3.11'
-            cache: pip
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
 
-        - name: Install dependencies
-          run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-        - name: Run pipeline
-          env:
-            TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          run: python main.py 2>&1
+      - name: Run pipeline
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py 2>&1
 
-        - name: Build static site
-          run: python build_site.py 2>&1
+      - name: Build static site
+        run: python build_site.py 2>&1
 
-        - name: Commit & push results
-          run: |
-            git config user.name  "aksel-bot"
-            git config user.email "aksel-bot@users.noreply.github.com"
-            git add signals/output/ docs/
-            git diff --staged --quiet || git commit -m "signals $(date -u 
-  +%Y-%m-%d)"
-            git push
+      - name: Commit & push results
+        run: |
+          git config user.name  "aksel-bot"
+          git config user.email "aksel-bot@users.noreply.github.com"
+          git add signals/output/ docs/
+          git diff --staged --quiet || git commit -m "signals $(date -u +%Y-%m-%d)"
+          git push
