@@ -1,4 +1,4 @@
-"""Generate docs/index.html from the latest signals CSV."""
+"""Generate docs/index.html with tabs for all 4 markets."""
 
 import csv
 import shutil
@@ -14,9 +14,16 @@ CHARTS_DST  = DOCS_DIR / "charts"
 DOCS_DIR.mkdir(exist_ok=True)
 CHARTS_DST.mkdir(exist_ok=True)
 
+MARKETS = [
+    ("europa",  "Europa"),
+    ("nasdaq",  "Nasdaq 100"),
+    ("sp500",   "S&P 500"),
+    ("russell", "Russell 2000"),
+]
 
-def _latest_csv():
-    csvs = sorted(SIGNALS_DIR.glob("signals_*.csv"))
+
+def _latest_csv(market: str):
+    csvs = sorted(SIGNALS_DIR.glob(f"signals_{market}_*.csv"))
     return csvs[-1] if csvs else None
 
 
@@ -45,18 +52,16 @@ def _fmt(val: str, decimals: int = 2) -> str:
         return val or "—"
 
 
-def build():
-    csv_path = _latest_csv()
+def _build_tab(market: str) -> tuple[str, str, int]:
+    csv_path = _latest_csv(market)
     if not csv_path:
-        print("No signals CSV found — nothing to build.")
-        return
+        return "—", "<tr><td colspan='10' style='text-align:center;color:#6e7681;padding:2rem'>Keine Daten — erster Run ausstehend</td></tr>", 0
 
-    run_date = csv_path.stem.replace("signals_", "")
+    run_date = "_".join(csv_path.stem.split("_")[2:])
 
     with open(csv_path) as f:
         rows = list(csv.DictReader(f))
 
-    # Copy chart PNGs for tickers that appear in latest signals
     tickers_in_csv = {r["ticker"] for r in rows}
     for chart_file in CHARTS_SRC.glob("*.png"):
         ticker = chart_file.name.split("_")[0]
@@ -85,36 +90,26 @@ def build():
             f"<td class=center>{chart_cell}</td>"
             f"</tr>\n"
         )
+    return run_date, tbody, len(rows)
 
+
+def build():
     now = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Breakout Signals {run_date}</title>
-  <style>
-    *{{box-sizing:border-box;margin:0;padding:0}}
-    body{{font-family:'SF Mono',Consolas,monospace;background:#0d1117;color:#c9d1d9;padding:1.5rem;font-size:13px}}
-    h1{{font-size:1rem;color:#58a6ff;margin-bottom:.25rem}}
-    .meta{{color:#6e7681;font-size:11px;margin-bottom:1rem}}
-    table{{border-collapse:collapse;width:100%}}
-    th{{color:#8b949e;border-bottom:1px solid #30363d;padding:5px 10px;text-align:left;font-weight:normal;white-space:nowrap}}
-    td{{padding:5px 10px;border-bottom:1px solid #161b22;white-space:nowrap}}
-    tr:hover td{{background:#161b22}}
-    .center{{text-align:center}}
-    .score{{font-weight:bold}}
-    .score.hi{{color:#3fb950}}
-    .score.mid{{color:#d29922}}
-    a{{color:#58a6ff;text-decoration:none}}
-    .legend{{margin:1.5rem 0 1rem;color:#6e7681;font-size:11px;line-height:1.8}}
-    .legend b{{color:#8b949e}}
-    .legend .row{{margin-bottom:.25rem}}
-  </style>
-</head>
-<body>
-  <h1>Breakout Signals</h1>
-  <p class="meta">Run date: {run_date} &nbsp;&middot;&nbsp; Generated: {now} &nbsp;&middot;&nbsp; {len(rows)} signals</p>
+
+    tab_buttons = ""
+    tab_panes   = ""
+
+    for i, (key, label) in enumerate(MARKETS):
+        run_date, tbody, count = _build_tab(key)
+        active = "active" if i == 0 else ""
+        tab_buttons += (
+            f'<button class="tab-btn {active}" '
+            f'onclick="showTab(\'{key}\')" id="btn-{key}">'
+            f'{label}<span class="badge">{count}</span></button>\n'
+        )
+        tab_panes += f"""
+<div class="tab-pane {active}" id="tab-{key}">
+  <p class="meta">Stand: {run_date} &nbsp;&middot;&nbsp; {count} Signale</p>
   <table>
     <thead>
       <tr>
@@ -125,18 +120,68 @@ def build():
     <tbody>
 {tbody}    </tbody>
   </table>
+</div>
+"""
+
+    html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Breakout Signals</title>
+  <style>
+    *{{box-sizing:border-box;margin:0;padding:0}}
+    body{{font-family:'SF Mono',Consolas,monospace;background:#0d1117;color:#c9d1d9;padding:1.5rem;font-size:13px}}
+    h1{{font-size:1rem;color:#58a6ff;margin-bottom:.5rem}}
+    .generated{{color:#6e7681;font-size:11px;margin-bottom:1rem}}
+    .tabs{{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}}
+    .tab-btn{{background:#161b22;border:1px solid #30363d;color:#8b949e;padding:.4rem 1rem;
+              border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;display:flex;
+              align-items:center;gap:.4rem}}
+    .tab-btn:hover{{border-color:#58a6ff;color:#c9d1d9}}
+    .tab-btn.active{{background:#1f6feb;border-color:#1f6feb;color:#fff}}
+    .badge{{background:#30363d;border-radius:10px;padding:1px 7px;font-size:10px}}
+    .tab-btn.active .badge{{background:rgba(255,255,255,.25)}}
+    .tab-pane{{display:none}}.tab-pane.active{{display:block}}
+    .meta{{color:#6e7681;font-size:11px;margin-bottom:.75rem}}
+    table{{border-collapse:collapse;width:100%}}
+    th{{color:#8b949e;border-bottom:1px solid #30363d;padding:5px 10px;text-align:left;
+        font-weight:normal;white-space:nowrap}}
+    td{{padding:5px 10px;border-bottom:1px solid #161b22;white-space:nowrap}}
+    tr:hover td{{background:#161b22}}
+    .center{{text-align:center}}
+    .score{{font-weight:bold}}
+    .score.hi{{color:#3fb950}}
+    .score.mid{{color:#d29922}}
+    a{{color:#58a6ff;text-decoration:none}}
+    .legend{{margin:1.5rem 0 1rem;color:#6e7681;font-size:11px;line-height:1.8}}
+    .legend b{{color:#8b949e}}
+  </style>
+</head>
+<body>
+  <h1>Breakout Signals</h1>
+  <p class="generated">Generiert: {now}</p>
+  <div class="tabs">
+{tab_buttons}  </div>
+{tab_panes}
   <div class="legend">
-    <div class="row"><b>Pattern</b> &nbsp; rectangle — Seitwärtsrange &nbsp;|&nbsp; triangle_sym — symmetrisches Dreieck &nbsp;|&nbsp; triangle_asc — aufsteigendes Dreieck &nbsp;|&nbsp; ihs — inverse Schulter-Kopf-Schulter</div>
-    <div class="row"><b>Breakout</b> &nbsp; type1 — bestätigter Ausbruch &nbsp;|&nbsp; type2 — Ausbruch + Retest &nbsp;|&nbsp; pending — Muster aktiv, kein Ausbruch</div>
-    <div class="row"><b>Confirmed</b> &nbsp; ✓ = 2 aufeinanderfolgende Closes außerhalb der Mustergrenze</div>
-    <div class="row"><b>Score</b> &nbsp; 0–100 &nbsp; <span style="color:#3fb950">&#x25A0;</span> ≥70 hoch &nbsp; <span style="color:#d29922">&#x25A0;</span> ≥50 mittel</div>
-    <div class="row"><b>Entry Low</b> — untere Grenze der Einstiegszone &nbsp;|&nbsp; <b>Target</b> — Kursziel (Measured Move) &nbsp;|&nbsp; <b>Move%</b> — erwartete Bewegung in %</div>
+    <div><b>Pattern</b> &nbsp; rectangle — Seitwärtsrange &nbsp;|&nbsp; triangle_sym — symm. Dreieck &nbsp;|&nbsp; triangle_asc — aufst. Dreieck &nbsp;|&nbsp; ihs — inv. SKS</div>
+    <div><b>Breakout</b> &nbsp; type1 — bestätigt &nbsp;|&nbsp; type2 — Ausbruch + Retest &nbsp;|&nbsp; pending — kein Ausbruch yet</div>
+    <div><b>Score</b> &nbsp; <span style="color:#3fb950">■</span> ≥70 hoch &nbsp; <span style="color:#d29922">■</span> ≥50 mittel &nbsp;|&nbsp; <b>Entry Low</b> — Einstiegszone unten &nbsp;|&nbsp; <b>Move%</b> — erwartete Bewegung</div>
   </div>
+  <script>
+    function showTab(key) {{
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + key).classList.add('active');
+      document.getElementById('btn-' + key).classList.add('active');
+    }}
+  </script>
 </body>
 </html>"""
 
     (DOCS_DIR / "index.html").write_text(html, encoding="utf-8")
-    print(f"Built docs/index.html — {len(rows)} signals from {run_date}")
+    print(f"Built docs/index.html — {now} — {len(MARKETS)} tabs")
 
 
 if __name__ == "__main__":
