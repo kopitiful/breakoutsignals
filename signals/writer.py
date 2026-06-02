@@ -45,7 +45,8 @@ def _to_signal(c: PatternCandidate) -> Signal:
     )
 
 
-def save_signals(candidates: list[PatternCandidate], run_date: date | None = None) -> int:
+def save_signals(candidates: list[PatternCandidate], run_date: date | None = None,
+                 market: str = "us") -> int:
     """Write candidates to DB and CSV. Returns count of saved signals."""
     if not candidates:
         return 0
@@ -56,7 +57,6 @@ def save_signals(candidates: list[PatternCandidate], run_date: date | None = Non
 
     with get_session(engine) as session:
         for c in candidates:
-            # Find earliest existing entry for this exact signal pattern
             first_seen = session.scalar(
                 select(func.min(Signal.created_at))
                 .where(
@@ -67,7 +67,6 @@ def save_signals(candidates: list[PatternCandidate], run_date: date | None = Non
             )
             if first_seen is None:
                 first_seen = today
-            # Store days-since-first-seen on the candidate for display
             c.first_seen_days = (today.date() - first_seen.date()
                                  if hasattr(first_seen, "date")
                                  else (today.date() - first_seen)).days
@@ -76,13 +75,13 @@ def save_signals(candidates: list[PatternCandidate], run_date: date | None = Non
 
         session.commit()
 
-    _write_csv(candidates, run_date)
-    log.info("Saved %d signals for %s", len(candidates), run_date)
+    _write_csv(candidates, run_date, market)
+    log.info("Saved %d signals for %s [%s]", len(candidates), run_date, market)
     return len(candidates)
 
 
-def _write_csv(candidates: list[PatternCandidate], run_date: date) -> Path:
-    path = SIGNALS_DIR / f"signals_{run_date}.csv"
+def _write_csv(candidates: list[PatternCandidate], run_date: date, market: str = "us") -> Path:
+    path = SIGNALS_DIR / f"signals_{market}_{run_date}.csv"
 
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
