@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Breakout Signals 2026-06-01</title>
+  <title>Breakout Signals</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'SF Mono',Consolas,monospace;background:#0d1117;color:#c9d1d9;padding:1.5rem;font-size:13px}
-    h1{font-size:1rem;color:#58a6ff;margin-bottom:.25rem}
-    .meta{color:#6e7681;font-size:11px;margin-bottom:1rem}
+    h1{font-size:1rem;color:#58a6ff;margin-bottom:.5rem}
+    .generated{color:#6e7681;font-size:11px;margin-bottom:1rem}
+    .tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+    .tab-btn{background:#161b22;border:1px solid #30363d;color:#8b949e;padding:.4rem 1rem;
+              border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;display:flex;
+              align-items:center;gap:.4rem}
+    .tab-btn:hover{border-color:#58a6ff;color:#c9d1d9}
+    .tab-btn.active{background:#1f6feb;border-color:#1f6feb;color:#fff}
+    .badge{background:#30363d;border-radius:10px;padding:1px 7px;font-size:10px}
+    .tab-btn.active .badge{background:rgba(255,255,255,.25)}
+    .tab-pane{display:none}.tab-pane.active{display:block}
+    .meta{color:#6e7681;font-size:11px;margin-bottom:.75rem}
     table{border-collapse:collapse;width:100%}
-    th{color:#8b949e;border-bottom:1px solid #30363d;padding:5px 10px;text-align:left;font-weight:normal;white-space:nowrap}
+    th{color:#8b949e;border-bottom:1px solid #30363d;padding:5px 10px;text-align:left;
+        font-weight:normal;white-space:nowrap}
     td{padding:5px 10px;border-bottom:1px solid #161b22;white-space:nowrap}
     tr:hover td{background:#161b22}
     .center{text-align:center}
@@ -20,12 +31,20 @@
     a{color:#58a6ff;text-decoration:none}
     .legend{margin:1.5rem 0 1rem;color:#6e7681;font-size:11px;line-height:1.8}
     .legend b{color:#8b949e}
-    .legend .row{margin-bottom:.25rem}
   </style>
 </head>
 <body>
   <h1>Breakout Signals</h1>
-  <p class="meta">Run date: 2026-06-01 &nbsp;&middot;&nbsp; Generated: 2026-06-01 21:13 UTC &nbsp;&middot;&nbsp; 44 signals</p>
+  <p class="generated">Generiert: 2026-06-02 08:54 UTC</p>
+  <div class="tabs">
+<button class="tab-btn active" onclick="showTab('europa')" id="btn-europa">Europa<span class="badge">44</span></button>
+<button class="tab-btn " onclick="showTab('nasdaq')" id="btn-nasdaq">Nasdaq 100<span class="badge">9</span></button>
+<button class="tab-btn " onclick="showTab('sp500')" id="btn-sp500">S&P 500<span class="badge">25</span></button>
+<button class="tab-btn " onclick="showTab('russell')" id="btn-russell">Russell 2000<span class="badge">11</span></button>
+  </div>
+
+<div class="tab-pane active" id="tab-europa">
+  <p class="meta">Stand: 2026-06-02 &nbsp;&middot;&nbsp; 44 Signale</p>
   <table>
     <thead>
       <tr>
@@ -80,12 +99,107 @@
 <tr><td><b>RIO.L</b></td><td>rectangle</td><td>type2</td><td class=center></td><td class='score '>48</td><td>active</td><td>7564.99</td><td>9007.81</td><td>23.6%</td><td class=center>—</td></tr>
     </tbody>
   </table>
+</div>
+
+<div class="tab-pane " id="tab-nasdaq">
+  <p class="meta">Stand: 2026-06-02 &nbsp;&middot;&nbsp; 9 Signale</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Confirmed</th>
+        <th>Score</th><th>Status</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td><b>MCHP</b></td><td>ihs</td><td>type1</td><td class=center></td><td class='score hi'>71</td><td>active</td><td>89.35</td><td>131.14</td><td>46.8%</td><td class=center><a href="charts/MCHP_ihs_2026-03-30.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>EA</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>66</td><td>active</td><td>204.22</td><td>211.43</td><td>3.7%</td><td class=center><a href="charts/EA_rectangle_2026-04-06.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>MDLZ</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>62.78</td><td>74.08</td><td>21.9%</td><td class=center><a href="charts/MDLZ_rectangle_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>XEL</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>54</td><td>active</td><td>84.16</td><td>96.97</td><td>15.2%</td><td class=center><a href="charts/XEL_ihs_2026-03-16.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>EA</b></td><td>triangle_asc</td><td>pending</td><td class=center></td><td class='score mid'>53</td><td>active</td><td>204.22</td><td>210.79</td><td>3.3%</td><td class=center><a href="charts/EA_triangle_asc_2026-04-06.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>ABNB</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>147.07</td><td>183.34</td><td>24.7%</td><td class=center><a href="charts/ABNB_ihs_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>META</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>672.67</td><td>825.08</td><td>22.7%</td><td class=center><a href="charts/META_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>BIIB</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>229.88</td><td>299.41</td><td>30.2%</td><td class=center><a href="charts/BIIB_ihs_2026-04-06.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>MDLZ</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score '>49</td><td>active</td><td>66.25</td><td>81.74</td><td>23.4%</td><td class=center><a href="charts/MDLZ_ihs_2026-03-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-pane " id="tab-sp500">
+  <p class="meta">Stand: 2026-06-02 &nbsp;&middot;&nbsp; 25 Signale</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Confirmed</th>
+        <th>Score</th><th>Status</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td><b>AMT</b></td><td>ihs</td><td>type1</td><td class=center></td><td class='score mid'>62</td><td>active</td><td>182.02</td><td>200.59</td><td>10.2%</td><td class=center><a href="charts/AMT_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>AIG</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class='score mid'>61</td><td>active</td><td>79.13</td><td>85.04</td><td>8.1%</td><td class=center><a href="charts/AIG_triangle_sym_2026-04-27.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CMCSA</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>59</td><td>active</td><td>31.85</td><td>39.82</td><td>33.4%</td><td class=center><a href="charts/CMCSA_rectangle_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>MDLZ</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>62.78</td><td>74.08</td><td>21.9%</td><td class=center><a href="charts/MDLZ_rectangle_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>BA</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>258.39</td><td>340.00</td><td>31.6%</td><td class=center><a href="charts/BA_ihs_2026-03-30.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>SO</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>98.31</td><td>114.16</td><td>16.1%</td><td class=center><a href="charts/SO_ihs_2026-03-16.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>ICE</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>174.51</td><td>206.73</td><td>18.5%</td><td class=center><a href="charts/ICE_ihs_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>VLO</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class='score mid'>56</td><td>active</td><td>257.21</td><td>321.05</td><td>33.0%</td><td class=center><a href="charts/VLO_triangle_sym_2026-03-30.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>AIG</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>55</td><td>active</td><td>86.74</td><td>106.09</td><td>22.3%</td><td class=center><a href="charts/AIG_ihs_2026-03-16.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>AMT</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>54</td><td>active</td><td>225.04</td><td>285.08</td><td>26.7%</td><td class=center><a href="charts/AMT_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>MOH</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class='score mid'>53</td><td>active</td><td>200.55</td><td>262.66</td><td>44.9%</td><td class=center><a href="charts/MOH_triangle_sym_2026-05-04.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>ABNB</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>147.07</td><td>183.34</td><td>24.7%</td><td class=center><a href="charts/ABNB_ihs_2026-02-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>PG</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>177.82</td><td>220.01</td><td>23.7%</td><td class=center><a href="charts/PG_ihs_2026-04-06.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>KMB</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>99.33</td><td>106.23</td><td>7.0%</td><td class=center><a href="charts/KMB_ihs_2026-05-04.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>META</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>672.67</td><td>825.08</td><td>22.7%</td><td class=center><a href="charts/META_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>TFC</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>50.98</td><td>59.29</td><td>16.3%</td><td class=center><a href="charts/TFC_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>KEY</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>22.38</td><td>26.03</td><td>16.3%</td><td class=center><a href="charts/KEY_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>AIG</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>51</td><td>active</td><td>80.01</td><td>89.20</td><td>11.5%</td><td class=center><a href="charts/AIG_ihs_2026-03-16.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>BAC</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>50</td><td>active</td><td>54.94</td><td>63.76</td><td>16.1%</td><td class=center><a href="charts/BAC_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>AFL</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>50</td><td>active</td><td>129.14</td><td>153.07</td><td>18.5%</td><td class=center><a href="charts/AFL_ihs_2026-03-23.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>ALL</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>50</td><td>active</td><td>218.71</td><td>247.24</td><td>13.1%</td><td class=center><a href="charts/ALL_ihs_2026-03-23.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>TRV</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>50</td><td>active</td><td>316.88</td><td>366.73</td><td>15.7%</td><td class=center>—</td></tr>
+<tr><td><b>AIG</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score '>50</td><td>active</td><td>80.46</td><td>88.09</td><td>10.5%</td><td class=center>—</td></tr>
+<tr><td><b>MDLZ</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score '>49</td><td>active</td><td>66.25</td><td>81.74</td><td>23.4%</td><td class=center><a href="charts/MDLZ_ihs_2026-03-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>TJX</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score '>48</td><td>active</td><td>163.71</td><td>182.47</td><td>11.5%</td><td class=center>—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-pane " id="tab-russell">
+  <p class="meta">Stand: 2026-06-02 &nbsp;&middot;&nbsp; 11 Signale</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Confirmed</th>
+        <th>Score</th><th>Status</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td><b>ATKR</b></td><td>ihs</td><td>type2</td><td class=center></td><td class='score hi'>79</td><td>active</td><td>80.55</td><td>112.41</td><td>39.6%</td><td class=center><a href="charts/ATKR_ihs_2025-08-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CAMT</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class='score hi'>72</td><td>active</td><td>206.20</td><td>260.80</td><td>36.0%</td><td class=center><a href="charts/CAMT_triangle_sym_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CHCO</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>69</td><td>active</td><td>128.57</td><td>141.46</td><td>11.1%</td><td class=center><a href="charts/CHCO_rectangle_2026-04-20.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>TREX</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class='score mid'>62</td><td>active</td><td>43.22</td><td>49.92</td><td>18.4%</td><td class=center><a href="charts/TREX_triangle_sym_2026-05-04.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CHCO</b></td><td>rectangle</td><td>pending</td><td class=center></td><td class='score mid'>59</td><td>active</td><td>128.15</td><td>141.68</td><td>11.8%</td><td class=center><a href="charts/CHCO_rectangle_2026-04-20.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>GBCI</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>57</td><td>active</td><td>54.70</td><td>70.08</td><td>28.1%</td><td class=center><a href="charts/GBCI_ihs_2026-03-09.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CUBE</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>56</td><td>active</td><td>42.03</td><td>51.65</td><td>22.9%</td><td class=center><a href="charts/CUBE_ihs_2026-03-23.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CHCO</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>53</td><td>active</td><td>129.10</td><td>145.77</td><td>12.9%</td><td class=center><a href="charts/CHCO_ihs_2026-05-11.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>STAG</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>40.10</td><td>44.97</td><td>12.2%</td><td class=center><a href="charts/STAG_ihs_2026-05-04.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>CUBE</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>52</td><td>active</td><td>42.61</td><td>51.14</td><td>20.0%</td><td class=center><a href="charts/CUBE_ihs_2026-03-23.png" target="_blank">&#x1F4C8;</a></td></tr>
+<tr><td><b>INMD</b></td><td>ihs</td><td>pending</td><td class=center></td><td class='score mid'>50</td><td>active</td><td>14.29</td><td>15.86</td><td>11.0%</td><td class=center><a href="charts/INMD_ihs_2026-05-04.png" target="_blank">&#x1F4C8;</a></td></tr>
+    </tbody>
+  </table>
+</div>
+
   <div class="legend">
-    <div class="row"><b>Pattern</b> &nbsp; rectangle — Seitwärtsrange &nbsp;|&nbsp; triangle_sym — symmetrisches Dreieck &nbsp;|&nbsp; triangle_asc — aufsteigendes Dreieck &nbsp;|&nbsp; ihs — inverse Schulter-Kopf-Schulter</div>
-    <div class="row"><b>Breakout</b> &nbsp; type1 — bestätigter Ausbruch &nbsp;|&nbsp; type2 — Ausbruch + Retest &nbsp;|&nbsp; pending — Muster aktiv, kein Ausbruch</div>
-    <div class="row"><b>Confirmed</b> &nbsp; ✓ = 2 aufeinanderfolgende Closes außerhalb der Mustergrenze</div>
-    <div class="row"><b>Score</b> &nbsp; 0–100 &nbsp; <span style="color:#3fb950">&#x25A0;</span> ≥70 hoch &nbsp; <span style="color:#d29922">&#x25A0;</span> ≥50 mittel</div>
-    <div class="row"><b>Entry Low</b> — untere Grenze der Einstiegszone &nbsp;|&nbsp; <b>Target</b> — Kursziel (Measured Move) &nbsp;|&nbsp; <b>Move%</b> — erwartete Bewegung in %</div>
+    <div><b>Pattern</b> &nbsp; rectangle — Seitwärtsrange &nbsp;|&nbsp; triangle_sym — symm. Dreieck &nbsp;|&nbsp; triangle_asc — aufst. Dreieck &nbsp;|&nbsp; ihs — inv. SKS</div>
+    <div><b>Breakout</b> &nbsp; type1 — bestätigt &nbsp;|&nbsp; type2 — Ausbruch + Retest &nbsp;|&nbsp; pending — kein Ausbruch yet</div>
+    <div><b>Score</b> &nbsp; <span style="color:#3fb950">■</span> ≥70 hoch &nbsp; <span style="color:#d29922">■</span> ≥50 mittel &nbsp;|&nbsp; <b>Entry Low</b> — Einstiegszone unten &nbsp;|&nbsp; <b>Move%</b> — erwartete Bewegung</div>
   </div>
+  <script>
+    function showTab(key) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + key).classList.add('active');
+      document.getElementById('btn-' + key).classList.add('active');
+    }
+  </script>
 </body>
 </html>
