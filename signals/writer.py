@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 
 CSV_FIELDS = [
     "ticker", "pattern_type", "breakout_type", "confirmed", "breakout_date",
+    "last_close",
     "entry_zone_low", "entry_zone_high", "stop_loss", "price_target",
     "measured_move_pct", "pattern_duration_weeks", "score", "status",
     "pattern_start_date", "pattern_end_date",
