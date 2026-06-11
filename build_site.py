@@ -228,9 +228,11 @@ def _render(market_data, now, total, latest_date) -> str:
         const sc = parseFloat(r.score||0) >= 70 ? 'hi' : parseFloat(r.score||0) >= 50 ? 'mid' : '';
         const fmt = (v, d=2) => v ? parseFloat(v).toFixed(d) : '—';
         const chartCell = r.chart ? `<a href="${{r.chart}}" target="_blank">&#x1F4C8;</a>` : '—';
+        const conf = ['full','volume','time'].includes(r.confirmed) ? '&#x2713;' : '';
         return `<tr>
           <td><button class="wl-remove" onclick="removeFromWL('${{key}}')" title="Entfernen">&#x2715;</button></td>
           <td><b>${{r.ticker}}</b></td><td>${{r.pattern_type}}</td><td>${{r.breakout_type}}</td>
+          <td class=center>${{conf}}</td>
           <td class="score ${{sc}}">${{fmt(r.score, 0)}}</td><td>${{r.status}}</td>
           <td class=right>${{fmt(r.last_close)}}</td>
           <td class=right>${{fmt(r.entry_zone_low)}}</td>
@@ -240,7 +242,7 @@ def _render(market_data, now, total, latest_date) -> str:
         </tr>`;
       }}).join('');
       tbl.innerHTML = `<table><thead><tr>
-        <th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th>
+        <th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Conf</th>
         <th>Score</th><th>Status</th><th>Kurs</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
       </tr></thead><tbody>${{rows}}</tbody></table>`;
     }}

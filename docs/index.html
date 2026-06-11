@@ -36,7 +36,7 @@
 </head>
 <body>
   <h1>Breakout Signals</h1>
-  <p class="meta">Stand: 2026-06-10 &nbsp;&middot;&nbsp; 2026-06-11 09:49 UTC &nbsp;&middot;&nbsp; 93 Signale</p>
+  <p class="meta">Stand: 2026-06-10 &nbsp;&middot;&nbsp; 2026-06-11 12:14 UTC &nbsp;&middot;&nbsp; 93 Signale</p>
 
   <div class="tabs"><div class="tab active" data-tab="europa">Europa</div><div class="tab" data-tab="nasdaq">Nasdaq 100</div><div class="tab" data-tab="sp500">S&P 500</div><div class="tab" data-tab="russell">Russell 2000</div><div class="tab" data-tab="wl">Watchlist</div></div>
   <div id="europa" class="panel active"><table><thead><tr><th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Conf</th><th>Score</th><th>Status</th><th>Kurs</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th></tr></thead><tbody><tr data-row='{"ticker": "ENR.DE", "pattern_type": "triangle_sym", "breakout_type": "pending", "confirmed": "pending", "score": "68.5", "status": "active", "last_close": "", "entry_zone_low": "191.6659650218594", "price_target": "242.28761014479477", "measured_move_pct": "35.89", "chart": "charts/ENR.DE_triangle_sym_2026-04-20.png"}'><td><button class="add-btn" title="Zur Watchlist hinzufügen">+</button></td><td><b>ENR.DE</b></td><td>triangle_sym</td><td>pending</td><td class=center></td><td class="score mid">68</td><td>active</td><td class=right>—</td><td class=right>191.67</td><td class=right>242.29</td><td class=right>35.9%</td><td class=center><a href="charts/ENR.DE_triangle_sym_2026-04-20.png" target="_blank">&#x1F4C8;</a></td></tr>
@@ -182,9 +182,11 @@
         const sc = parseFloat(r.score||0) >= 70 ? 'hi' : parseFloat(r.score||0) >= 50 ? 'mid' : '';
         const fmt = (v, d=2) => v ? parseFloat(v).toFixed(d) : '—';
         const chartCell = r.chart ? `<a href="${r.chart}" target="_blank">&#x1F4C8;</a>` : '—';
+        const conf = ['full','volume','time'].includes(r.confirmed) ? '&#x2713;' : '';
         return `<tr>
           <td><button class="wl-remove" onclick="removeFromWL('${key}')" title="Entfernen">&#x2715;</button></td>
           <td><b>${r.ticker}</b></td><td>${r.pattern_type}</td><td>${r.breakout_type}</td>
+          <td class=center>${conf}</td>
           <td class="score ${sc}">${fmt(r.score, 0)}</td><td>${r.status}</td>
           <td class=right>${fmt(r.last_close)}</td>
           <td class=right>${fmt(r.entry_zone_low)}</td>
@@ -194,7 +196,7 @@
         </tr>`;
       }).join('');
       tbl.innerHTML = `<table><thead><tr>
-        <th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th>
+        <th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th><th>Conf</th>
         <th>Score</th><th>Status</th><th>Kurs</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
       </tr></thead><tbody>${rows}</tbody></table>`;
     }
