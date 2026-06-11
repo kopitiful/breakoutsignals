@@ -38,8 +38,8 @@ CHARTS_DIR = SIGNALS_DIR / "charts"
 CHARTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # How many weeks before/after the pattern to show
-PRE_PATTERN_WEEKS  = 12
-POST_PATTERN_WEEKS = 20
+PRE_PATTERN_WEEKS  = 30
+POST_PATTERN_WEEKS = 36
 
 
 def _prep_df(df: pd.DataFrame) -> pd.DataFrame:
