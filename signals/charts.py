@@ -171,6 +171,11 @@ def generate(c: PatternCandidate, df: pd.DataFrame) -> Path | None:
 
         ax = axes[0]
 
+        # ── vertical padding ──────────────────────────────────────────────────
+        y_low  = mpf_df["Low"].min()
+        y_high = mpf_df["High"].max()
+        ax.set_ylim(y_low * 0.75, y_high * 1.20)
+
         # ── shaded pattern window ─────────────────────────────────────────────
 
         dates_ts = list(mpf_df.index)
