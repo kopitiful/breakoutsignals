@@ -1,14 +1,16 @@
 """
-One-shot CLI runner — runs the full pipeline for US and European markets.
+One-shot CLI runner — runs the full pipeline for all 4 markets.
 Usage:
-  python main.py                  # US + EU tickers from config/
-  python main.py AAPL MSFT TSLA  # specific tickers (US table only)
+  python main.py                  # Europa + Nasdaq + S&P 500 + Russell
+  python main.py AAPL MSFT TSLA  # specific tickers (custom table)
 """
 
 import logging
 import sys
 
-from config.settings import TICKERS_EU_CSV
+from config.settings import (
+    TICKERS_EU_CSV, TICKERS_NASDAQ_CSV, TICKERS_SP500_CSV, TICKERS_RUSSELL_CSV
+)
 from data.fetcher import load_tickers
 from pipeline import run, TABLE_ROWS
 
@@ -23,7 +25,6 @@ DIVIDER = "-" * 117
 
 
 def _dist_label(c) -> str:
-    """Distance of last_close from entry_zone_low as a signed percentage."""
     if c.entry_zone_low <= 0:
         return "     —"
     pct = (c.last_close - c.entry_zone_low) / c.entry_zone_low * 100
@@ -50,51 +51,20 @@ def _print_table(candidates, title: str) -> None:
         print("  (keine aktiven Signale)")
 
 
+MARKETS = [
+    (TICKERS_EU_CSV,      "europa",  "EUROPA"),
+    (TICKERS_NASDAQ_CSV,  "nasdaq",  "NASDAQ 100"),
+    (TICKERS_SP500_CSV,   "sp500",   "S&P 500"),
+    (TICKERS_RUSSELL_CSV, "russell", "RUSSELL 2000"),
+]
+
 if __name__ == "__main__":
     explicit_tickers = sys.argv[1:] or None
 
     if explicit_tickers:
-        candidates = run(tickers=explicit_tickers, label="CUSTOM")
+        candidates = run(tickers=explicit_tickers, label="custom")
         _print_table(candidates, "CUSTOM")
     else:
-        us_candidates = run(tickers=load_tickers(), label="US")
-        eu_candidates = run(tickers=load_tickers(TICKERS_EU_CSV), label="EU")
-
-        _print_table(us_candidates,  "US MARKETS  (Long-Signale, nach Score sortiert)")
-        _print_table(eu_candidates,  "EU MARKETS  (Long-Signale, nach Score sortiert)")
-
-    print("""
-LEGENDE  (nur Long-Signale / Ausbrüche nach oben)
-───────────────────────────────────────────────────────────────────────────────
-TICKER    Symbol  (EU-Ticker mit Börsen-Suffix, z.B. SAP.DE, ASML.AS, NOVO-B.CO)
-PATTERN   rectangle       Rechteck-Konsolidierung (horizontale Bänder)
-          triangle_sym    Symmetrisches Dreieck (Ausbruch nach oben)
-          triangle_asc    Aufsteigendes Dreieck (flache Highs + steigende Lows)
-          ihs             Inv. Head & Shoulders — bullisch, Ausbruch nach oben
-
-BK TYPE   pending         Noch kein Ausbruch — Kurs still im Muster (Watchlist!)
-          type1           Sauberer Ausbruch, Kurs bleibt außerhalb
-          type2           Ausbruch mit Retest an der Grenze (Wick), kein Close darunter
-
-CONFIRM   full            Volumen ≥1,5× Ø UND 2 Closes außerhalb → höchste Qualität
-          volume          Nur Volumen bestätigt
-          time            Nur 2 aufeinanderfolgende Closes außerhalb bestätigt
-          none            Ausbruch ohne Bestätigung — Vorsicht
-          pending         Noch kein Ausbruch, keine Bestätigung möglich
-
-SCORE     0–100  Composite-Score: Qualität (40%) + Volumen (30%) + BK-Typ (20%)
-                 + hist. Erfolgsrate (10%), multipliziert mit Confirmations-Faktor
-                 full=×1.25  volume/time=×1.10  none=×0.75
-
-ENTRY LOW Untere Kante der Einstiegszone (knapp über Ausbruchsgrenze)
-TARGET    Kursziel (gemessener Move = Musterhöhe ab Ausbruchspunkt projiziert)
-MOVE%     Erwartete Bewegung in % von Entry bis Target
-DIST      Abstand des aktuellen Kurses zur Entry-Zone
-          "entry"   Kurs liegt praktisch auf der Einstiegslinie (±0,5%)
-          negativ   Kurs noch unterhalb Entry → Ausbruch noch nicht erreicht
-          positiv   Kurs bereits über Entry → je größer, desto mehr nachlaufen
-DAYS      Tage seit diesem Signal zum ersten Mal in der Tabelle erschienen ist
-          "neu"     Signal wird heute zum ersten Mal gesehen
-───────────────────────────────────────────────────────────────────────────────
-Charts:  signals/output/charts/   CSV: signals/output/signals_DATUM.csv
-""")
+        for csv_path, label, title in MARKETS:
+            candidates = run(tickers=load_tickers(csv_path), label=label)
+            _print_table(candidates, title)

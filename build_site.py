@@ -1,4 +1,4 @@
-"""Generate docs/index.html from the latest signals CSV."""
+"""Generate docs/index.html with tabs for all 4 markets."""
 
 import csv
 import shutil
@@ -14,9 +14,16 @@ CHARTS_DST  = DOCS_DIR / "charts"
 DOCS_DIR.mkdir(exist_ok=True)
 CHARTS_DST.mkdir(exist_ok=True)
 
+MARKETS = [
+    ("europa",  "Europa"),
+    ("nasdaq",  "Nasdaq 100"),
+    ("sp500",   "S&P 500"),
+    ("russell", "Russell 2000"),
+]
 
-def _latest_csv():
-    csvs = sorted(SIGNALS_DIR.glob("signals_*.csv"))
+
+def _latest_csv(market: str):
+    csvs = sorted(SIGNALS_DIR.glob(f"signals_{market}_*.csv"))
     return csvs[-1] if csvs else None
 
 

@@ -1,11 +1,5 @@
 """
 Main analysis pipeline — runs for a single day's batch.
-
-Order:
-  1. Fetch / refresh market data
-  2. Analyse each ticker in parallel (multiprocessing)
-  3. Filter to actionable signals only (active patterns + recent breakouts)
-  4. Persist signals + send alerts
 """
 
 import logging
@@ -33,29 +27,14 @@ from detection.base import PatternCandidate
 log = logging.getLogger(__name__)
 
 DETECTORS  = [rectangle.detect, triangle.detect, head_shoulders.detect]
-TABLE_ROWS = 20   # must match main.py display limit
+TABLE_ROWS = 20
 
 
 def _is_actionable(c: PatternCandidate, last_close: float, last_bar_date: date) -> bool:
-    """
-    Return True only if this signal is tradeable NOW (upside only).
-
-    Case A — Pending (no breakout yet):
-      • Current price is still inside the pattern boundaries (consolidation ongoing)
-      • Breakout could happen any day → always show these
-
-    Case B — Recent breakout Type 1 or 2:
-      • Breakout within SIGNAL_MAX_BREAKOUT_WEEKS (still enterable)
-      • Price hasn't run more than 1.5× the measured move past entry
-
-    Type 3, Type 4, old breakouts, downside signals → discard.
-    """
-    # Only upside signals: entry zone must be at/above the upper bound
     if c.entry_zone_low < c.upper_bound * 0.97:
         return False
 
     if c.breakout_type == "pending":
-        # Price must be inside the pattern right now — this is the core check
         return c.lower_bound <= last_close <= c.upper_bound
 
     if c.breakout_type in ("type1", "type2"):
@@ -65,22 +44,17 @@ def _is_actionable(c: PatternCandidate, last_close: float, last_bar_date: date) 
         if c.breakout_date < breakout_cutoff:
             return False
 
-        # Determine breakout direction from entry zone position
-        up = c.entry_zone_low >= c.upper_bound * 0.97   # entry above resistance → upside break
-        dn = c.entry_zone_high <= c.lower_bound * 1.03  # entry below support → downside break
+        up = c.entry_zone_low >= c.upper_bound * 0.97
+        dn = c.entry_zone_high <= c.lower_bound * 1.03
 
         if up:
-            # Price must be above pattern floor and within 8% below entry
-            # (deeper than 8% below entry = breakout failed, not a retest)
             if last_close < c.lower_bound:
                 return False
             if last_close < c.entry_zone_low * 0.92:
                 return False
-            # Max 8% above entry — beyond that the move is too far gone
             max_chase = c.entry_zone_high * 1.08
             return last_close <= max_chase
         if dn:
-            # Price must be below pattern ceiling and within 8% above entry
             if last_close > c.upper_bound:
                 return False
             if last_close > c.entry_zone_high * 1.08:
@@ -88,13 +62,12 @@ def _is_actionable(c: PatternCandidate, last_close: float, last_bar_date: date) 
             min_chase = c.entry_zone_low * (1 - c.measured_move_pct / 100)
             return last_close >= min_chase
 
-        return True   # direction ambiguous — keep and let trader decide
+        return True
 
     return False
 
 
 def _analyse_ticker(args: tuple[str, pd.DataFrame]) -> list[PatternCandidate]:
-    """Worker function — runs in a subprocess."""
     ticker, df = args
 
     if len(df) > DETECTION_LOOKBACK_WEEKS:
@@ -111,7 +84,7 @@ def _analyse_ticker(args: tuple[str, pd.DataFrame]) -> list[PatternCandidate]:
     filtered   = 0
     for c in candidates:
         classify(c, df)
-        calculate(c)   # entry zone must be set before actionability check
+        calculate(c)
         if _is_actionable(c, last_close, last_bar_date):
             score(c, df)
             c.last_close = last_close
@@ -126,9 +99,9 @@ def _analyse_ticker(args: tuple[str, pd.DataFrame]) -> list[PatternCandidate]:
 
 
 def run(tickers: list[str] | None = None, run_date: date | None = None,
-        label: str = "US") -> list[PatternCandidate]:
+        label: str = "us") -> list[PatternCandidate]:
     run_date = run_date or date.today()
-    log.info("=== Aksel pipeline [%s] starting for %s ===", label, run_date)
+    log.info("=== Pipeline [%s] starting for %s ===", label, run_date)
 
     if tickers is None:
         tickers = load_tickers()
@@ -145,12 +118,9 @@ def run(tickers: list[str] | None = None, run_date: date | None = None,
     all_candidates: list[PatternCandidate] = [c for batch in results for c in batch]
     all_candidates.sort(key=lambda c: c.score, reverse=True)
 
-    log.info(
-        "Actionable signals: %d across %d tickers",
-        len(all_candidates), len(items),
-    )
+    log.info("Actionable signals: %d across %d tickers", len(all_candidates), len(items))
 
-    saved = save_signals(all_candidates, run_date)
+    saved = save_signals(all_candidates, run_date, market=label.lower())
     generate_all(all_candidates[:TABLE_ROWS], data)
     send_alerts(all_candidates)
 
