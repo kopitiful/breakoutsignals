@@ -70,7 +70,7 @@ def _row_html(r: dict) -> str:
     row_data   = json.dumps({k: r.get(k, "") for k in [
         "ticker", "pattern_type", "breakout_type", "confirmed", "score", "status",
         "last_close", "entry_zone_low", "price_target", "measured_move_pct",
-    ]}, ensure_ascii=False)
+    ]} | {"chart": chart or ""}, ensure_ascii=False)
     return (
         f'<tr data-row=\'{row_data}\'>'
         f'<td><button class="add-btn" title="Zur Watchlist hinzufügen">+</button></td>'
@@ -128,9 +128,8 @@ def _render(market_data, now, total, latest_date) -> str:
     first_key = market_data[0][0] if market_data else "europa"
 
     tab_html = "".join(
-        f'<div class="tab{" active" if i == 0 else ""}" data-tab="{key}">'
-        f'{label} <span class="tab-date">{date}</span></div>'
-        for i, (key, label, _, date) in enumerate(market_data)
+        f'<div class="tab{" active" if i == 0 else ""}" data-tab="{key}">{label}</div>'
+        for i, (key, label, _, _date) in enumerate(market_data)
     ) + '<div class="tab" data-tab="wl">Watchlist</div>'
 
     panel_html = "".join(
@@ -228,6 +227,7 @@ def _render(market_data, now, total, latest_date) -> str:
         const key = r.ticker + '|' + r.pattern_type;
         const sc = parseFloat(r.score||0) >= 70 ? 'hi' : parseFloat(r.score||0) >= 50 ? 'mid' : '';
         const fmt = (v, d=2) => v ? parseFloat(v).toFixed(d) : '—';
+        const chartCell = r.chart ? `<a href="${{r.chart}}" target="_blank">&#x1F4C8;</a>` : '—';
         return `<tr>
           <td><button class="wl-remove" onclick="removeFromWL('${{key}}')" title="Entfernen">&#x2715;</button></td>
           <td><b>${{r.ticker}}</b></td><td>${{r.pattern_type}}</td><td>${{r.breakout_type}}</td>
@@ -236,11 +236,12 @@ def _render(market_data, now, total, latest_date) -> str:
           <td class=right>${{fmt(r.entry_zone_low)}}</td>
           <td class=right>${{fmt(r.price_target)}}</td>
           <td class=right>${{fmt(r.measured_move_pct, 1)}}%</td>
+          <td class=center>${{chartCell}}</td>
         </tr>`;
       }}).join('');
       tbl.innerHTML = `<table><thead><tr>
         <th></th><th>Ticker</th><th>Pattern</th><th>Breakout</th>
-        <th>Score</th><th>Status</th><th>Kurs</th><th>Entry Low</th><th>Target</th><th>Move%</th>
+        <th>Score</th><th>Status</th><th>Kurs</th><th>Entry Low</th><th>Target</th><th>Move%</th><th>Chart</th>
       </tr></thead><tbody>${{rows}}</tbody></table>`;
     }}
 
