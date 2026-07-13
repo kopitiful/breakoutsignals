@@ -121,7 +121,7 @@ def run(tickers: list[str] | None = None, run_date: date | None = None,
     log.info("Actionable signals: %d across %d tickers", len(all_candidates), len(items))
 
     saved = save_signals(all_candidates, run_date, market=label.lower())
-    generate_all(all_candidates[:TABLE_ROWS], data)
+    generate_all(all_candidates, data)
     send_alerts(all_candidates)
 
     log.info("Pipeline complete: %d signals saved.", saved)

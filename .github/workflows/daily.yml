@@ -2,7 +2,8 @@ name: Daily Signal Run
 
 on:
   schedule:
-    - cron: '45 6 * * 1-5'
+    - cron: '45 6 * * 1-5'   # Mo–Fr 06:45 UTC
+    - cron: '0 7 * * 6'      # Sa   07:00 UTC (Wochenend-Review)
   workflow_dispatch:
 
 permissions:
