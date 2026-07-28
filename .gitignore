@@ -7,3 +7,9 @@ __pycache__/
 signals/output/.DS_Store
 signals/output/charts/.DS_Store
 .claude/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
